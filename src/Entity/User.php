@@ -2,37 +2,45 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 /**
  * Class User
  * @package App\Entity
- *  
  */
-class User{
+#[ORM\Entity]
+class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
-    /**
-     *
-     * @var integer|null
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     *
-     * @var string
-     */
+    #[ORM\Column(type:'string',unique:true)]
     private string $email;
 
-    /**
-     *
-     * @var string
-     */
+    #[ORM\Column(type:'string')]
     private string $password;
 
-    /**
-     *
-     * @var string
-     */
+    #[ORM\Column(type: 'string')]
     private string $username;
 
+    /**
+     * @param  string $email
+     * @param  string $password
+     * @param  string $username
+     * @return self
+     */
+    public static function create(string $email, string $username): self
+    {
+        $user = new self();
+        $user->email = $email;
+        $user->username = $username;
+
+        return $user;
+    }
 
     /**
      * Get the value of id
@@ -43,7 +51,7 @@ class User{
     {
         return $this->id;
     }
-    
+
 
     /**
      * Get the value of email
@@ -74,7 +82,7 @@ class User{
      *
      * @return  string
      */ 
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -116,4 +124,33 @@ class User{
 
         return $this;
     }
+
+     /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+       return ['ROLE_USER'];
+    }
+
+    public function getSalt()
+    {
+        // TODO 
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO
+    }
+
 }

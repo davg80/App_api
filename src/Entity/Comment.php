@@ -2,34 +2,44 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Class Comment
- * @package App\Entity
- *  
+ * @package App\Entity  
  */
+#[ORM\Entity]
 class Comment{
 
     /**
-     *
      * @var integer|null
      */
+    #[ORM\Id]
+    #[ORM\Column(type:'integer')]
+    #[ORM\GeneratedValue]
     private ?int $id;
     /**
-     *
      * @var string
      */
+    #[ORM\Column(type:'text')]
     private string $content;
     /**
-     *
      * @var \DateTimeInterface
      */
+    #[ORM\Column(type: 'datetime_immutable',  options:["default" => "CURRENT_TIMESTAMP"])]
     private \DateTimeInterface $date_comment;
 
     /**
-     *
      * @var User
      */
+    #[ORM\ManyToOne(targetEntity: 'User')]
     private User $author;
+
+    /**
+     * @var PostArticle
+     */
+    #[ORM\ManyToOne(targetEntity: 'PostArticle')]
+    private PostArticle $postArticle;
 
     /**
      * @param \DateTimeImmutable $publishedAt
@@ -98,15 +108,9 @@ class Comment{
     }
 
     /**
-     * 
-     * @var PostArticles
-     */
-    private PostArticles $post_article;
-
-    /**
      * Get the value of post_article
      *
-     * @return  PostArticles
+     * @return  PostArticle
      */ 
     public function getPost_article()
     {
@@ -116,13 +120,53 @@ class Comment{
     /**
      * Set the value of post_article
      *
-     * @param  PostArticles  $post_article
+     * @param  PostArticle  $post_article
      *
      * @return  self
      */ 
-    public function setPost_article(PostArticles $post_article)
+    public function setPost_article(PostArticle $post_article)
     {
         $this->post_article = $post_article;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of author
+     */ 
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Set the value of author
+     *
+     * @return  self
+     */ 
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of postArticle
+     */ 
+    public function getPostArticle()
+    {
+        return $this->postArticle;
+    }
+
+    /**
+     * Set the value of postArticle
+     *
+     * @return  self
+     */ 
+    public function setPostArticle($postArticle)
+    {
+        $this->postArticle = $postArticle;
 
         return $this;
     }

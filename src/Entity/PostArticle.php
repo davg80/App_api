@@ -2,38 +2,40 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class PostArticles
+ * Class PostArticle
  * @package App\Entity
  *  
  */
-class PostArticles{
-     /**
-     *
-     * @var integer|null
-     */
+#[ORM\Entity()]
+class PostArticle{
+     
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
     
+    #[ORM\Column(type: 'text')]
     private string $content;
 
     /**
      *
      * @var DateTimeInterface
      */
-    private DateTimeInterface $publishedAt;
+    #[ORM\Column(type: 'datetime_immutable',  options:["default" => "CURRENT_TIMESTAMP"])]
+    private \DateTimeInterface $publishedAt;
 
-    /**
-     *
-     * @var User
-     */
-    private User $author;
 
     /**
      *
      * @var User[]
      */
+    #[ORM\ManyToMany(targetEntity: 'User')]
+    #[ORM\JoinTable(name:"post_likes")]
     private array $likedby;
 
     /**
@@ -74,30 +76,6 @@ class PostArticles{
         return $this;
     }
 
-
-    /**
-     * Get the value of author
-     *
-     * @return  User
-     */ 
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set the value of author
-     *
-     * @param  User  $author
-     *
-     * @return  self
-     */ 
-    public function setAuthor(User $author)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
 
     /**
      * Get the value of publishedAt
