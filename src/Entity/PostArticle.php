@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class PostArticle
@@ -19,9 +19,11 @@ class PostArticle{
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups("articles")]
     private ?int $id;
     
     #[ORM\Column(type: 'text')]
+    #[Groups("articles")]
     private string $content;
 
     /**
@@ -29,6 +31,7 @@ class PostArticle{
      * @var DateTimeInterface
      */
     #[ORM\Column(type: 'datetime_immutable',  options:["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("articles")]
     private \DateTimeInterface $publishedAt;
 
     /**

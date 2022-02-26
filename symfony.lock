@@ -98,6 +98,18 @@
     "nikic/php-parser": {
         "version": "v4.13.2"
     },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.3.0"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.6.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "1.2.0"
+    },
     "psr/cache": {
         "version": "3.0.0"
     },
@@ -109,6 +121,18 @@
     },
     "psr/log": {
         "version": "3.0.0"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "6.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "./config/packages/sensio_framework_extra.yaml"
+        ]
     },
     "symfony/cache": {
         "version": "v6.0.3"
@@ -265,6 +289,9 @@
     "symfony/security-http": {
         "version": "v6.0.3"
     },
+    "symfony/serializer": {
+        "version": "v6.0.3"
+    },
     "symfony/service-contracts": {
         "version": "v3.0.0"
     },
@@ -282,5 +309,8 @@
     },
     "symfony/yaml": {
         "version": "v6.0.3"
+    },
+    "webmozart/assert": {
+        "version": "1.10.0"
     }
 }
