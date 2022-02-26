@@ -42,11 +42,26 @@ class Comment{
     private PostArticle $postArticle;
 
     /**
-     * @param \DateTimeImmutable $publishedAt
+     * @param \DateTimeImmutable $date_comment
      */
     public function __construct()
     {
-        $this->publishedAt = new \DateTimeImmutable();
+        $this->date_comment = new \DateTimeImmutable();
+    }
+
+    /**
+     * @param  string      $content
+     * @param  User        $author
+     * @param  PostArticle $post_article
+     * @return self
+     */
+    public static function create(string $content, User $author, PostArticle $post_article): self
+    {
+        $comment = new self();
+        $comment->content = $content;
+        $comment->author = $author;
+        $comment->post_article = $post_article;
+        return $comment;
     }
 
     /**

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,14 +31,13 @@ class PostArticle{
     #[ORM\Column(type: 'datetime_immutable',  options:["default" => "CURRENT_TIMESTAMP"])]
     private \DateTimeInterface $publishedAt;
 
-
     /**
      *
-     * @var User[]
+     * @var User[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: 'User')]
     #[ORM\JoinTable(name:"post_likes")]
-    private array $likedby;
+    private Collection $likedBy;
 
     /**
      * PostArticle Immutable
@@ -44,6 +45,18 @@ class PostArticle{
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
+        $this->likedBy = new ArrayCollection();
+    }
+
+    /**
+     * @param  string $content
+     * @return self
+     */
+    public static function create(string $content): self
+    {
+        $post = new self();
+        $post->content = $content;
+        return $post;
     }
 
     /**
@@ -104,24 +117,35 @@ class PostArticle{
     /**
      * Get the value of likedby
      *
-     * @return  User[]
+     * @var User[]|Collection
      */ 
-    public function getLikedby()
+    public function getLikedby(): Collection
     {
-        return $this->likedby;
+        return $this->likedBy;
     }
 
     /**
-     * Set the value of likedby
-     *
-     * @param  User[]  $likedby
-     *
-     * @return  self
-     */ 
-    public function setLikedby(array $likedby)
+     * @param  User $user
+     * @return void
+     */    
+    public function LikeBy(User $user): void
     {
-        $this->likedby = $likedby;
-
-        return $this;
+        if($this->likedBy->contains($user)){
+            return;
+        }
+        $this->likedBy->add($user);
     }
+
+    /**
+     * @param  User $user
+     * @return void
+     */
+    public function dislikeBy(User $user): void
+    {
+        if(!$this->likedBy->contains($user)){
+            return;
+        }
+        $this->likedBy->removeElement($user);
+    }
+
 }
