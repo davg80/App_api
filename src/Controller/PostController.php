@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class PostController
@@ -60,11 +61,18 @@ class PostController
         PostArticle $post_article,
         SerializerInterface $serializer, 
         EntityManagerInterface $entityManager, 
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        ValidatorInterface $validator
     ): JsonResponse {
         //$post_article = $serializer->deserialize($request->getContent(), PostArticle::class, 'json');
         // Temp for not error
         // $post_article->setAuthor($entityManager->getRepository(User::class)->findOneBy([]));
+        $errors = $validator->validate($post_article);
+
+        if($errors->count() > 0) {
+            return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST,[], true);
+        }
+
         $entityManager->persist($post_article);
         $entityManager->flush();
 
@@ -85,9 +93,16 @@ class PostController
     #[Route('/{id}', name: 'api_article_update', methods:['PUT'])]
     public function update(
         PostArticle $post_article,
-        EntityManagerInterface $entityManager
+        SerializerInterface $serializer,
+        EntityManagerInterface $entityManager,
+        ValidatorInterface $validator
     ): JsonResponse
     {
+        $errors = $validator->validate($post_article);
+
+        if($errors->count() > 0) {
+            return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST,[], true);
+        }
         $entityManager->flush();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
