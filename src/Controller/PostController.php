@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -51,18 +50,19 @@ class PostController
     }
 
     /**
-     * @param  Request             $request
+     * @param  Request  $request
+     * @param PostArticle $post_article
      * @param  SerializerInterface $serializer
      * @return JsonResponse
      */
     #[Route(name: 'api_article_create', methods:['POST'])]
     public function create(
-        Request $request, 
+        PostArticle $post_article,
         SerializerInterface $serializer, 
         EntityManagerInterface $entityManager, 
         UrlGeneratorInterface $urlGenerator
     ): JsonResponse {
-        $post_article = $serializer->deserialize($request->getContent(), PostArticle::class, 'json');
+        //$post_article = $serializer->deserialize($request->getContent(), PostArticle::class, 'json');
         // Temp for not error
         // $post_article->setAuthor($entityManager->getRepository(User::class)->findOneBy([]));
         $entityManager->persist($post_article);
@@ -79,25 +79,15 @@ class PostController
 
     /**
      * @param  PostArticle            $post_article
-     * @param  Request                $request
-     * @param  SerializerInterface    $serializer
      * @param  EntityManagerInterface $entityManager
      * @return JsonResponse
      */
     #[Route('/{id}', name: 'api_article_update', methods:['PUT'])]
     public function update(
-        PostArticle $post_article, 
-        Request $request, 
-        SerializerInterface $serializer,
+        PostArticle $post_article,
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
-        $serializer->deserialize(
-            $request->getContent(), 
-            PostArticle::class,
-            'json', 
-            [AbstractNormalizer::OBJECT_TO_POPULATE => $post_article]
-        );
         $entityManager->flush();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
