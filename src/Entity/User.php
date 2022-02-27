@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
  * @package App\Entity
  */
 #[ORM\Entity]
+#[ORM\Table(name:'users')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
     #[ORM\Id]
@@ -168,12 +169,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         // TODO
     }
 
-
     /**
      * Get the value of username
      */ 
     public function getUsername()
     {
-        return $this->email;
+        return $this->username;
     }
 }

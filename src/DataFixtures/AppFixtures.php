@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\Comment;
-use App\Entity\PostArticle;
+use App\Entity\Article;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -45,7 +45,7 @@ class AppFixtures extends Fixture
         // create posts
         foreach($users as $user) {
             for ($j = 0; $j < 5; $j++) {
-                $post = PostArticle::create("Content", $user);
+                $post = Article::create("Content", $user);
 
                 shuffle($users);
 

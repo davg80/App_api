@@ -2,7 +2,7 @@
 
 namespace App\Request\ParamConverter;
 
-use App\Entity\PostArticle;
+use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -53,6 +53,6 @@ class ItemConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === PostArticle::class;
+        return $configuration->getClass() === Article::class;
     }
 }

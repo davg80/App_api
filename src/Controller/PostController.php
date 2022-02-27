@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\PostArticle;
+use App\Entity\Article;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +35,7 @@ class PostController
     }
 
     /**
-     *  @param PostArticle $post_article
+     *  @param Article $article
      *  @param SerializerInterface $serializer 
      *  @return JsonResponse
      */
@@ -52,53 +52,53 @@ class PostController
 
     /**
      * @param  Request  $request
-     * @param PostArticle $post_article
+     * @param Article $article
      * @param  SerializerInterface $serializer
      * @return JsonResponse
      */
     #[Route(name: 'api_article_create', methods:['POST'])]
     public function create(
-        PostArticle $post_article,
+        Article $article,
         SerializerInterface $serializer, 
         EntityManagerInterface $entityManager, 
         UrlGeneratorInterface $urlGenerator,
         ValidatorInterface $validator
     ): JsonResponse {
-        //$post_article = $serializer->deserialize($request->getContent(), PostArticle::class, 'json');
+        //$article = $serializer->deserialize($request->getContent(), Article::class, 'json');
         // Temp for not error
-        // $post_article->setAuthor($entityManager->getRepository(User::class)->findOneBy([]));
-        $errors = $validator->validate($post_article);
+        // $article->setAuthor($entityManager->getRepository(User::class)->findOneBy([]));
+        $errors = $validator->validate($article);
 
         if($errors->count() > 0) {
             return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST,[], true);
         }
 
-        $entityManager->persist($post_article);
+        $entityManager->persist($article);
         $entityManager->flush();
 
         return new JsonResponse(
-            $serializer->serialize($post_article, 'json', ["groups" => "articles"]),
+            $serializer->serialize($article, 'json', ["groups" => "articles"]),
             JsonResponse::HTTP_CREATED,
-            ["Location" => $urlGenerator->generate('api_article', ["id" => $post_article->getId()])],
+            ["Location" => $urlGenerator->generate('api_article', ["id" => $article->getId()])],
             true
         );
 
     }
 
     /**
-     * @param  PostArticle            $post_article
+     * @param  Article            $article
      * @param  EntityManagerInterface $entityManager
      * @return JsonResponse
      */
     #[Route('/{id}', name: 'api_article_update', methods:['PUT'])]
     public function update(
-        PostArticle $post_article,
+        Article $article,
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator
     ): JsonResponse
     {
-        $errors = $validator->validate($post_article);
+        $errors = $validator->validate($article);
 
         if($errors->count() > 0) {
             return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST,[], true);
@@ -109,17 +109,17 @@ class PostController
 
 
     /**
-     * @param  PostArticle            $post_article
+     * @param  Article            $article
      * @param  EntityManagerInterface $entityManager
      * @return JsonResponse
      */
     #[Route('/{id}', name: 'api_article_delete', methods:['DELETE'])]
     public function delete(
-        PostArticle $post_article, 
+        Article $article, 
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
-        $entityManager->remove($post_article);
+        $entityManager->remove($article);
         $entityManager->flush();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }

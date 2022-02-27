@@ -10,12 +10,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class PostArticle
+ * Class Article
  * @package App\Entity
  *  
  */
 #[ORM\Entity()]
-class PostArticle{
+#[ORM\Table(name:'articles')]
+class Article{
      
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,11 +43,11 @@ class PostArticle{
      * @var User[]|Collection
      */
     #[ORM\ManyToMany(targetEntity: 'User')]
-    #[ORM\JoinTable(name:"post_likes")]
+    #[ORM\JoinTable(name:"likes")]
     private Collection $likedBy;
 
     /**
-     * PostArticle Immutable
+     * Article Immutable
      */
     public function __construct()
     {
@@ -60,9 +61,9 @@ class PostArticle{
      */
     public static function create(string $content): self
     {
-        $post = new self();
-        $post->content = $content;
-        return $post;
+        $article = new self();
+        $article->content = $content;
+        return $article;
     }
 
     /**

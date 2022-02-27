@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity  
  */
 #[ORM\Entity]
+#[ORM\Table(name:'comments')]
 class Comment{
 
     /**
@@ -37,11 +38,11 @@ class Comment{
     private User $author;
 
     /**
-     * @var PostArticle
+     * @var Article
      */
-    #[ORM\ManyToOne(targetEntity: 'PostArticle')]
+    #[ORM\ManyToOne(targetEntity: 'Article')]
     #[ORM\JoinColumn(onDelete:'CASCADE')]
-    private PostArticle $postArticle;
+    private Article $Article;
 
     /**
      * @param \DateTimeImmutable $date_comment
@@ -54,15 +55,15 @@ class Comment{
     /**
      * @param  string      $content
      * @param  User        $author
-     * @param  PostArticle $post_article
+     * @param  Article article
      * @return self
      */
-    public static function create(string $content, User $author, PostArticle $post_article): self
+    public static function create(string $content, User $author, Article $article): self
     {
         $comment = new self();
         $comment->content = $content;
         $comment->author = $author;
-        $comment->post_article = $post_article;
+        $comment->article = $article;
         return $comment;
     }
 
@@ -124,29 +125,7 @@ class Comment{
         return $this;
     }
 
-    /**
-     * Get the value of post_article
-     *
-     * @return  PostArticle
-     */ 
-    public function getPost_article()
-    {
-        return $this->post_article;
-    }
-
-    /**
-     * Set the value of post_article
-     *
-     * @param  PostArticle  $post_article
-     *
-     * @return  self
-     */ 
-    public function setPost_article(PostArticle $post_article)
-    {
-        $this->post_article = $post_article;
-
-        return $this;
-    }
+  
 
     /**
      * Get the value of author
@@ -169,21 +148,21 @@ class Comment{
     }
 
     /**
-     * Get the value of postArticle
+     * Get the value of Article
      */ 
-    public function getPostArticle()
+    public function getArticle()
     {
-        return $this->postArticle;
+        return $this->Article;
     }
 
     /**
-     * Set the value of postArticle
+     * Set the value of Article
      *
      * @return  self
      */ 
-    public function setPostArticle($postArticle)
+    public function setArticle($Article)
     {
-        $this->postArticle = $postArticle;
+        $this->Article = $Article;
 
         return $this;
     }
