@@ -18,13 +18,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[ORM\Column(type:'string',unique:true)]
+    #[ORM\Column(type:'string', length: 180, unique:true)]
     private string $email;
+
+    #[ORM\Column(type: 'json')]
+    private $roles = [];
 
     #[ORM\Column(type:'string')]
     private string $password;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 100, unique:true)]
     private string $username;
 
     /**
@@ -37,6 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     {
         $user = new self();
         $user->email = $email;
+        $user->roles = ["ROLE_USER"];
         $user->username = $username;
 
         return $user;
@@ -102,16 +106,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     }
 
     /**
-     * Get the value of username
-     *
-     * @return  string
-     */ 
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
      * Set the value of username
      *
      * @param  string  $username
@@ -130,12 +124,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
      */
     public function getRoles(): array
     {
-       return ['ROLE_USER'];
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+ 
+        return array_unique($roles);
     }
 
-    public function getSalt()
+    /**
+     * @param  array $roles
+     * @return self
+     */
+    public function setRoles(array $roles): self
     {
-        // TODO 
+        $this->roles = $roles;
+ 
+        return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
     }
 
     /**
@@ -153,4 +168,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         // TODO
     }
 
+
+    /**
+     * Get the value of username
+     */ 
+    public function getUsername()
+    {
+        return $this->email;
+    }
 }

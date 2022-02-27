@@ -31,6 +31,8 @@ services:
     App\Request\ParamConverter\PostConverter:
         tags: 
             - { name: 'request.param_converter', converter: 'post_converter', priority: 0 }
+            
+    Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface: '@App\Repository\UserRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
