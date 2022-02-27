@@ -5,7 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class User
  * @package App\Entity
@@ -20,15 +21,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     private ?int $id;
 
     #[ORM\Column(type:'string', length: 180, unique:true)]
+    #[Groups("users")]
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern:"/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/",
+        message:"Identifiants non valides"
+    )]
     private string $email;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: 'json',options: ["default" =>  "ROLE_USER"])]
     private $roles = [];
 
     #[ORM\Column(type:'string')]
+    #[Groups("users")]
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern:"/^(?=.*[a-z])(?=.*\\d).{6,}$/i",
+        message:"Le nouveau mot de passe doit comporter au moins 6 caractères et inclure au moins une lettre et un chiffre.")
+    ]
     private string $password;
 
-    #[ORM\Column(type: 'string', length: 100, unique:true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     private string $username;
 
     /**

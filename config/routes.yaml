@@ -9,3 +9,9 @@ kernel:
     
 api_login_check:
     path: /api/login_check
+    controller: App\Controller\AuthController::getTokenUser
+
+register:
+    path: /register
+    controller: App\Controller\AuthController::register
+    methods: POST
