@@ -5,14 +5,10 @@ namespace App\Controller;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Namshi\JOSE\JWT;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthController{
@@ -50,9 +46,16 @@ class AuthController{
         );
     }
 
+    /**
+     *
+     * @param  UserInterface            $user
+     * @param  JWTTokenManagerInterface $jwtManager
+     * @return void
+     */
    public function getTokenUser(UserInterface $user, JWTTokenManagerInterface $jwtManager)
    {
        return new JsonResponse(['token' => $jwtManager->create($user)]);
    }
+//    Ce qui est préconisé en termes de sécurité, c'est un token avec une durée de vie très courte mais rafraîchi à chaque requête faite.
 
 }

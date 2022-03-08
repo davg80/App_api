@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     private string $password;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private string $username;
+    private ?string $username;
 
     /**
      * @param  string $email
